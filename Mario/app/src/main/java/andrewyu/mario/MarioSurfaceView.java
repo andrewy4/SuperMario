@@ -9,8 +9,11 @@ import android.view.SurfaceView;
 /**
  * Created by Andrew Yu on 5/17/2015.
  */
-public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback, TimeConscious{
+public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
     public MarioThread renderThread;
+    public Stage1 stage1;
+    private float Width;
+    private float Height;
     public MarioSurfaceView (Context context){
         super(context);
         getHolder().addCallback(this);
@@ -19,6 +22,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated (SurfaceHolder holder){
+        Width = getWidth();
+        Height = getHeight();
+        stage1 = new Stage1(this, Width, Height);
         renderThread = new MarioThread( this);
         renderThread.start();
 
@@ -52,8 +58,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 // Draw everything ( restricted to the displayed rectangle ) .
     }
 
-    @Override
-    public void tick(Canvas c){
+    public void renderGame(Canvas c){
+        stage1.renderGame(c);
 
     }
 

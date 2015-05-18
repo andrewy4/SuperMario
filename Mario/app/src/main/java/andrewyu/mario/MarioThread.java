@@ -20,7 +20,7 @@ public class MarioThread extends Thread{
             Canvas c = sh . lockCanvas ( null ) ;
             try {
                 synchronized ( sh ) {
-                    view . tick ( c ) ;
+                    view . renderGame ( c ) ;
 
                 }
             } catch ( Exception e ) {
