@@ -24,6 +24,7 @@ public class Stage1{
     private ArrayList<Objects> floor = new ArrayList<>();
     private ArrayList<Objects> backgroundObjects = new ArrayList<>();
     private ArrayList<Objects> blocks = new ArrayList<>();
+    public ArrayList<Objects> stage1 = new ArrayList<>();
 
     public Stage1(MarioSurfaceView view, float Width, float Height){
         move = 0;
@@ -119,6 +120,15 @@ public class Stage1{
             }
 
         }
+        for(int i =0; i<floor.size();i++){
+            stage1.add(floor.get(i));
+        }
+        for(int i =0; i<backgroundObjects.size();i++){
+            stage1.add(backgroundObjects.get(i));
+        }
+        for(int i =0; i<blocks.size();i++){
+            stage1.add(blocks.get(i));
+        }
 
 
     }
@@ -129,14 +139,9 @@ public class Stage1{
     }
     public void walking(Canvas c){
 
-        for(int i =0; i <floor.size(); i++){
-            floor.get(i).moving(Width);
-        }
-        for(int i = 0; i<backgroundObjects.size();i++){
-            backgroundObjects.get(i).moving(Width);
-        }
-        for(int i = 0; i<blocks.size();i++){
-            blocks.get(i).moving(Width);
+
+        for(int i = 0; i<stage1.size();i++){
+            stage1.get(i).moving(Width);
         }
         c.drawBitmap(mario.get(move), null, marioSize, paint);
         move ++;
@@ -148,14 +153,9 @@ public class Stage1{
 
     public void renderGame(Canvas c) {
         background(c);
-        for(int i = 0; i<floor.size();i++){
-            c.drawBitmap(floor.get(i).bitmap,null,floor.get(i).Dst, paint);
-        }
-        for(int i = 0; i<backgroundObjects.size(); i++){
-            c.drawBitmap(backgroundObjects.get(i).bitmap,null,backgroundObjects.get(i).Dst, paint);
-        }
-        for(int i = 0; i<blocks.size();i++){
-            c.drawBitmap(blocks.get(i).bitmap,null,blocks.get(i).Dst,paint);
+
+        for(int i =0; i<stage1.size();i++){
+            c.drawBitmap(stage1.get(i).bitmap,null,stage1.get(i).Dst,paint);
         }
         walking(c);
 
