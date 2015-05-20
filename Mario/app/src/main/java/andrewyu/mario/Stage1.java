@@ -25,14 +25,14 @@ public class Stage1{
 
     public ArrayList<Objects> stage1 = new ArrayList<>();
 
-    public Stage1(ArrayList<Bitmap> mario,Bitmap sky, Bitmap ground,Bitmap cloud1,Bitmap cloud2,Bitmap cloud3,Bitmap breakableBrick,Bitmap questionMarkBrick,Bitmap emptyQuestionBrick,Bitmap castle, float Width, float Height){
+    public Stage1(ArrayList<Bitmap> mario,ArrayList<Bitmap> goomba, Bitmap sky, Bitmap ground,Bitmap cloud1,Bitmap cloud2,Bitmap cloud3,Bitmap breakableBrick,Bitmap questionMarkBrick,Bitmap emptyQuestionBrick,Bitmap castle, float Width, float Height){
         ArrayList<Objects> floor = new ArrayList<>();
         ArrayList<Objects> backgroundObjects = new ArrayList<>();
         ArrayList<Objects> blocks = new ArrayList<>();
         jumpCounter = 0;
         move =0;
         this.Width = (int)Width;
-        gravity = (int)Height/43;
+        gravity = (int)Height/49;
         marioDiff = this.Width/45;
         int sizeDiff = this.Width/25;
         this.mario = mario;
@@ -49,26 +49,21 @@ public class Stage1{
                 for(int x = i; x<89;x++){
                     floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 2*sizeDiff, sizeDiff, sizeDiff));
                 }
-                for(int x = i+1;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 3*sizeDiff, sizeDiff, sizeDiff));
-                }
+
                 for(int x = i+2;x<89;x++){
                     floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 4*sizeDiff, sizeDiff, sizeDiff));
                 }
-                for(int x = i+3;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 5*sizeDiff, sizeDiff, sizeDiff));
-                }
+
                 for(int x = i+4;x<89;x++){
                     floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 6*sizeDiff, sizeDiff, sizeDiff));
                 }
-                for(int x = i+5;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 7*sizeDiff, sizeDiff, sizeDiff));
-                }
+
                 for(int x = i+6;x<89;x++){
                     floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 8*sizeDiff, sizeDiff, sizeDiff));
                 }
-                for(int x = i+7;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 9*sizeDiff, sizeDiff, sizeDiff));
+
+                for(int x = 3; x<10; x+=2) {
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor, false, false, sizeDiff * 88, (int) Height - x * sizeDiff, sizeDiff, sizeDiff));
                 }
             }
         }
@@ -132,12 +127,20 @@ public class Stage1{
     public void action(boolean left, boolean right, boolean jump) {
         boolean stop = false;
         if (right) {
+            for(int i =0; i<stage1.size();i++) {
+                if (stage1.get(i).type != Objects.Type.background && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() <= stage1.get(i).Dst.left && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
+                    stop = true;
+                }
+            }
             if (marioDst.centerX() < Width / 2) {
-                marioDst.offset((Width / 45), 0);
+
+                if(!stop)
+                    marioDst.offset((Width / 45), 0);
             }
                 if (marioDst.centerX() >= Width / 2) {
-                    for(int i=0;i<stage1.size();i++)
-                            stage1.get(i).moving(Width);
+                        if(!stop)
+                            for(int i=0;i<stage1.size();i++)
+                                stage1.get(i).moving(Width);
                 }
                 move++;
                 if (move == 4) {
@@ -146,16 +149,27 @@ public class Stage1{
         }
 
             if (left) {
-                if (marioDst.left >= marioDiff) {
+                for(int i =0; i<stage1.size();i++) {
+                    if (stage1.get(i).type != Objects.Type.background && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() >= stage1.get(i).Dst.right && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
+                        stop = true;
+                    }
+                }
+                if (marioDst.left >= marioDiff && !stop) {
                     marioDst.offset(-(Width) / 45, 0);
                 }
                 move++;
                 if (move == 8) {
                     move = 5;
                 }
+
             }
             if (jump) {
                 jumpCounter++;
+                for(int i =0; i<stage1.size();i++) {
+                    if (stage1.get(i).type == Objects.Type.brick && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerY() >= stage1.get(i).Dst.bottom && marioDst.centerX() >= stage1.get(i).Dst.left && marioDst.centerX() <= stage1.get(i).Dst.right) {
+                        jumpCounter = 11;
+                    }
+                }
                 if (jumpCounter < 10) {
                     marioDst.offset(0, -(int) (1.5 * marioDiff));
                 }

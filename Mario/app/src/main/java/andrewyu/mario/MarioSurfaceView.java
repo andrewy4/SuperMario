@@ -10,14 +10,12 @@ import android.view.SurfaceView;
 
 import java.util.ArrayList;
 
-/**
+/*
  * Created by Andrew Yu on 5/17/2015.
  */
 public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callback{
     public MarioThread renderThread;
     public Stage1 stage1;
-    private float Width;
-    private float Height;
     private boolean walkRight, walkLeft,jump;
     private ControlBottom controlBottom;
     public MarioSurfaceView (Context context){
@@ -31,9 +29,10 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         walkLeft = false;
         walkRight = false;
         jump = false;
-        Width = getWidth();
-        Height = getHeight();
+        float Width = getWidth();
+        float Height = getHeight();
         ArrayList<Bitmap> mario = new ArrayList<>();
+        ArrayList<Bitmap> goomba = new ArrayList<>();
         BitmapFactory.Options options = new BitmapFactory.Options();
         Bitmap sky = BitmapFactory.decodeResource(getResources(), R.drawable.stage1sky, options);
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariostand, options));
@@ -47,6 +46,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariorightjump, options));
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.marioleftjump, options));
 
+        goomba.add(BitmapFactory.decodeResource(getResources(), R.drawable.goomba1, options));
+        goomba.add(BitmapFactory.decodeResource(getResources(), R.drawable.goomba2, options));
+
         Bitmap ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground, options);
         Bitmap cloud1 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud1, options);
         Bitmap cloud2 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud2, options);
@@ -59,7 +61,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         Bitmap leftArrow = BitmapFactory.decodeResource(getResources(), R.drawable.leftarrow, options);
         Bitmap rightArrow = BitmapFactory.decodeResource(getResources(), R.drawable.rightarrow, options);
         Bitmap jumpBottom = BitmapFactory.decodeResource(getResources(), R.drawable.jumpbottom, options);
-        stage1 = new Stage1(mario,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,castle, Width, Height);
+        stage1 = new Stage1(mario,goomba,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,castle, Width, Height);
         controlBottom = new ControlBottom(leftArrow, rightArrow, jumpBottom, Width, Height);
         renderThread = new MarioThread( this);
         renderThread.start();
@@ -122,7 +124,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void renderGame(Canvas c){
         stage1.renderGame(c);
         controlBottom.render(c);
-        if(walkRight == true || walkLeft == true || jump == true){
+        if(walkRight || walkLeft || jump){
             stage1.action(walkLeft, walkRight, jump);
         }
 
