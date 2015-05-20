@@ -15,7 +15,7 @@ public class Stage1{
     private Bitmap sky;
     private ArrayList<Bitmap> mario;
     private int Width;
-
+    private int Height;
     private Paint paint;
     private Rect skyDst;
     private Rect marioDst;
@@ -23,20 +23,24 @@ public class Stage1{
     public int gravity;
     int marioDiff, jumpCounter;
 
+
+
     public ArrayList<Objects> stage1 = new ArrayList<>();
 
-    public Stage1(ArrayList<Bitmap> mario,ArrayList<Bitmap> goomba, Bitmap sky, Bitmap ground,Bitmap cloud1,Bitmap cloud2,Bitmap cloud3,Bitmap breakableBrick,Bitmap questionMarkBrick,Bitmap emptyQuestionBrick,Bitmap castle, float Width, float Height){
+    public Stage1(ArrayList<Bitmap> mario,Bitmap goomba, Bitmap sky, Bitmap ground,Bitmap cloud1,Bitmap cloud2,Bitmap cloud3,Bitmap breakableBrick,Bitmap questionMarkBrick,Bitmap emptyQuestionBrick,Bitmap castle, float Width, float h){
         ArrayList<Objects> floor = new ArrayList<>();
         ArrayList<Objects> backgroundObjects = new ArrayList<>();
         ArrayList<Objects> blocks = new ArrayList<>();
         jumpCounter = 0;
         move =0;
         this.Width = (int)Width;
-        gravity = (int)Height/49;
+        this.Height = (int)h;
+        gravity = Height/49;
         marioDiff = this.Width/45;
         int sizeDiff = this.Width/25;
         this.mario = mario;
         this.sky = sky;
+
 
         paint = new Paint();
         skyDst = new Rect(0,0,this.Width, (int)Height);
@@ -44,67 +48,80 @@ public class Stage1{
         for(int i = 0; i <100; i++) {
             if( i == 40 || i == 41  || i == 59 || i == 60 || i == 75|| i == 76 || i == 77)
                 continue;
-            floor.add(new Objects(ground, Objects.Type.floor,false, false, sizeDiff * i, (int) Height - sizeDiff, sizeDiff, sizeDiff));
+            floor.add(new Objects(ground, Objects.Type.floor,false, false,false, sizeDiff * i, (int) Height - sizeDiff, sizeDiff, sizeDiff));
             if(i == 80){
                 for(int x = i; x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 2*sizeDiff, sizeDiff, sizeDiff));
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false,false, sizeDiff * x, (int) Height - 2*sizeDiff, sizeDiff, sizeDiff));
                 }
 
                 for(int x = i+2;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 4*sizeDiff, sizeDiff, sizeDiff));
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false,false, sizeDiff * x, (int) Height - 4*sizeDiff, sizeDiff, sizeDiff));
                 }
 
                 for(int x = i+4;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 6*sizeDiff, sizeDiff, sizeDiff));
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false,false, sizeDiff * x, (int) Height - 6*sizeDiff, sizeDiff, sizeDiff));
                 }
 
                 for(int x = i+6;x<89;x++){
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false, sizeDiff * x, (int) Height - 8*sizeDiff, sizeDiff, sizeDiff));
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor,false, false,false, sizeDiff * x, (int) Height - 8*sizeDiff, sizeDiff, sizeDiff));
                 }
 
                 for(int x = 3; x<10; x+=2) {
-                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor, false, false, sizeDiff * 88, (int) Height - x * sizeDiff, sizeDiff, sizeDiff));
+                    floor.add(new Objects(emptyQuestionBrick, Objects.Type.floor, false, false,false, sizeDiff * 88, (int) Height - x * sizeDiff, sizeDiff, sizeDiff));
                 }
             }
         }
         for(int i = 0; i< 100; i++){
             if(i == 7 || i == 20 || i == 40 || i == 55 || i == 60 || i == 72 || i == 89)
-                backgroundObjects.add(new Objects(cloud1,Objects.Type.background,false,false,sizeDiff*i,(int) Height/16,this.Width/9,this.Width/9));
+                backgroundObjects.add(new Objects(cloud1,Objects.Type.background,false,false,false,sizeDiff*i,(int) Height/16,this.Width/9,this.Width/9));
             if(i == 13 ||  i == 26 ||  i == 35 ||  i == 76)
-                backgroundObjects.add(new Objects(cloud2,Objects.Type.background,false,false,sizeDiff*i,(int) Height/22,this.Width/9,this.Width/9));
+                backgroundObjects.add(new Objects(cloud2,Objects.Type.background,false,false,false,sizeDiff*i,(int) Height/22,this.Width/9,this.Width/9));
             if(i == 15 || i == 30 || i == 92)
-                backgroundObjects.add(new Objects(cloud3,Objects.Type.background,false,false,sizeDiff*i,(int) Height/19,this.Width/5,this.Width/9));
+                backgroundObjects.add(new Objects(cloud3,Objects.Type.background,false,false,false,sizeDiff*i,(int) Height/19,this.Width/5,this.Width/9));
             if(i == 92)
-                backgroundObjects.add(new Objects(castle,Objects.Type.background,false,false,sizeDiff * i, (int) Height - 8*sizeDiff, (6)*sizeDiff, (7)*sizeDiff));
+                backgroundObjects.add(new Objects(castle,Objects.Type.background,false,false,true,sizeDiff * i, (int) Height - 8*sizeDiff, (6)*sizeDiff, (7)*sizeDiff));
         }
 
         for(int i = 0; i<100;i++){
             if(i == 10) {
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick,false,true, sizeDiff * i, (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
-                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false, sizeDiff * (i+1), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * (i+2), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
-                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false, sizeDiff * (i+3), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * (i+4), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick,false,true,false, sizeDiff * i, (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false,false, sizeDiff * (i+1), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * (i+2), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false,false, sizeDiff * (i+3), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * (i+4), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
             }
             if(i ==50){
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * i, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
-                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false, sizeDiff * (i+1), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * (i+2), (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * i, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
+                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false,false, sizeDiff * (i+1), (int) Height - (5 * sizeDiff), sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * (i+2), (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
                 for(int x = i+3; x<67;x++){
                     if(x == 60 || x == 61 || x == 62)
                         continue;
-                    blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * x, (int) Height - 9 * sizeDiff, sizeDiff, sizeDiff));
+                    blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * x, (int) Height - 9 * sizeDiff, sizeDiff, sizeDiff));
                 }
             }
             if(i == 67){
-                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * i, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
-                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false, sizeDiff * i, (int) Height - 9 * sizeDiff, sizeDiff, sizeDiff));
+                blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * i, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
+                blocks.add(new Objects(questionMarkBrick, Objects.Type.brick, true,false,false, sizeDiff * i, (int) Height - 9 * sizeDiff, sizeDiff, sizeDiff));
                 for(int x = i+2; x<(i+5); x++){
-                    blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true, sizeDiff * x, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
+                    blocks.add(new Objects(breakableBrick, Objects.Type.brick, false,true,false, sizeDiff * x, (int) Height - 5 * sizeDiff, sizeDiff, sizeDiff));
                 }
             }
 
         }
+        for(int i =10; i<15;i+=2){
+            stage1.add(new Objects(goomba, Objects.Type.monster, false, true,false, sizeDiff *i, Height - 2*sizeDiff, sizeDiff, sizeDiff));
+        }
+        for(int i = 45; i<52; i+=2){
+            stage1.add(new Objects(goomba, Objects.Type.monster, false, true,false, sizeDiff *i, Height - 2*sizeDiff, sizeDiff, sizeDiff));
+        }
+        for(int i = 63; i<68; i+=2){
+            blocks.add(new Objects(goomba, Objects.Type.monster, false,true,false, sizeDiff * i, (int) Height - 10 * sizeDiff, sizeDiff, sizeDiff));
+        }
+        for(int i = 85; i<89; i+=2){
+            blocks.add(new Objects(goomba, Objects.Type.monster, false,true,false, sizeDiff * i, 0, sizeDiff, sizeDiff));
+        }
+
         for(int i =0; i<backgroundObjects.size();i++){
             stage1.add(backgroundObjects.get(i));
         }
@@ -128,7 +145,7 @@ public class Stage1{
         boolean stop = false;
         if (right) {
             for(int i =0; i<stage1.size();i++) {
-                if (stage1.get(i).type != Objects.Type.background && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() <= stage1.get(i).Dst.left && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
+                if (stage1.get(i).type != Objects.Type.background && stage1.get(i).type!= Objects.Type.monster && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() <= stage1.get(i).Dst.left && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
                     stop = true;
                 }
             }
@@ -150,7 +167,7 @@ public class Stage1{
 
             if (left) {
                 for(int i =0; i<stage1.size();i++) {
-                    if (stage1.get(i).type != Objects.Type.background && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() >= stage1.get(i).Dst.right && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
+                    if (stage1.get(i).type != Objects.Type.background && stage1.get(i).type!= Objects.Type.monster && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerX() >= stage1.get(i).Dst.right && marioDst.centerY() >= stage1.get(i).Dst.top && marioDst.centerY() <= stage1.get(i).Dst.bottom) {
                         stop = true;
                     }
                 }
@@ -166,7 +183,7 @@ public class Stage1{
             if (jump) {
                 jumpCounter++;
                 for(int i =0; i<stage1.size();i++) {
-                    if (stage1.get(i).type == Objects.Type.brick && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerY() >= stage1.get(i).Dst.bottom && marioDst.centerX() >= stage1.get(i).Dst.left && marioDst.centerX() <= stage1.get(i).Dst.right) {
+                    if (stage1.get(i).type != Objects.Type.monster && stage1.get(i).type != Objects.Type.background && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerY() >= stage1.get(i).Dst.bottom && marioDst.centerX() >= stage1.get(i).Dst.left && marioDst.centerX() <= stage1.get(i).Dst.right) {
                         jumpCounter = 11;
                     }
                 }
@@ -180,7 +197,10 @@ public class Stage1{
     public void gravity(){
         drop = true;
         for(int i =0;i<stage1.size();i++) {
-            if(stage1.get(i).type!= Objects.Type.background && marioDst.intersects(marioDst,stage1.get(i).Dst)){
+            if(stage1.get(i).type == Objects.Type.monster && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerY()<stage1.get(i).Dst.top) {
+                stage1.remove(i);
+            }
+            if(stage1.get(i).type!= Objects.Type.background && stage1.get(i).type!= Objects.Type.monster && marioDst.intersects(marioDst,stage1.get(i).Dst)){
                 if(marioDst.centerY()<stage1.get(i).Dst.top){
                     drop = false;
                 }
@@ -191,14 +211,39 @@ public class Stage1{
         }
     }
 
+    public int gameOver(){
+        int condition = 0;
+
+        if(marioDst.centerY()>Height)
+            condition = 1;
+        for(int i =0; i<stage1.size();i++){
+            if(stage1.get(i).endingPoint){
+                if(marioDst.centerX() >= stage1.get(i).Dst.centerX())
+                    condition = 2;
+            }
+            if(stage1.get(i).type == Objects.Type.monster && marioDst.intersects(marioDst, stage1.get(i).Dst) && marioDst.centerY()>=stage1.get(i).Dst.top){
+                condition = 1;
+            }
+        }
+
+        return condition;
+
+    }
+
 
     public void renderGame(Canvas c) {
         background(c);
 
+
         for(int i =0; i<stage1.size();i++){
-            c.drawBitmap(stage1.get(i).bitmap,null,stage1.get(i).Dst,paint);
+            if(stage1.get(i).type== Objects.Type.monster){
+                stage1.get(i).monsterMoving(Width,Height,stage1,gravity);
+            }
+            c.drawBitmap(stage1.get(i).bitmap, null, stage1.get(i).Dst, paint);
         }
         gravity();
         c.drawBitmap(mario.get(move), null, marioDst, paint);
+
+
     }
 }
