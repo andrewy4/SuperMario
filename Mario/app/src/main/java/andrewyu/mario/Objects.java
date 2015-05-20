@@ -22,6 +22,6 @@ public class Objects {
         Dst = new Rect(x,y,x+dx,y+dy);
     }
     public void moving(int Width){
-        Dst.offset(-(Width/25),0);
+        Dst.offset(-(Width / 35), 0);
     }
 }

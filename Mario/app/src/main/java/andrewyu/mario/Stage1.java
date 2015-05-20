@@ -11,6 +11,7 @@ import java.util.ArrayList;
  * Created by Andrew Yu on 5/17/2015.
  */
 public class Stage1{
+    public boolean drop;
     private Bitmap sky;
     private ArrayList<Bitmap> mario;
     private int Width;
@@ -20,7 +21,7 @@ public class Stage1{
     private Rect marioDst;
     public int move;
     public int gravity;
-    int marioDiff;
+    int marioDiff, jumpCounter;
 
     public ArrayList<Objects> stage1 = new ArrayList<>();
 
@@ -28,7 +29,7 @@ public class Stage1{
         ArrayList<Objects> floor = new ArrayList<>();
         ArrayList<Objects> backgroundObjects = new ArrayList<>();
         ArrayList<Objects> blocks = new ArrayList<>();
-
+        jumpCounter = 0;
         move =0;
         this.Width = (int)Width;
         gravity = (int)Height/43;
@@ -39,9 +40,9 @@ public class Stage1{
 
         paint = new Paint();
         skyDst = new Rect(0,0,this.Width, (int)Height);
-        marioDst = new Rect((this.Width/2)-marioDiff, 0,(this.Width/2)+marioDiff, 2*marioDiff);
+        marioDst = new Rect(0, (int) (Height/2),2*marioDiff, (int)(Height/2+2*marioDiff));
         for(int i = 0; i <100; i++) {
-            if(i == 40 || i == 41 || i == 59 || i == 60 || i == 75|| i == 76 || i == 77)
+            if( i == 40 || i == 41  || i == 59 || i == 60 || i == 75|| i == 76 || i == 77)
                 continue;
             floor.add(new Objects(ground, Objects.Type.floor,false, false, sizeDiff * i, (int) Height - sizeDiff, sizeDiff, sizeDiff));
             if(i == 80){
@@ -128,19 +129,42 @@ public class Stage1{
         c.drawBitmap(sky,null,skyDst,paint);
     }
 
-    public void walking(){
-
-
-        for(int i = 0; i<stage1.size();i++){
-            stage1.get(i).moving(Width);
+    public void action(boolean left, boolean right, boolean jump) {
+        boolean stop = false;
+        if (right) {
+            if (marioDst.centerX() < Width / 2) {
+                marioDst.offset((Width / 45), 0);
+            }
+                if (marioDst.centerX() >= Width / 2) {
+                    for(int i=0;i<stage1.size();i++)
+                            stage1.get(i).moving(Width);
+                }
+                move++;
+                if (move == 4) {
+                    move = 1;
+                }
         }
-        move ++;
-        if(move ==4){
-            move = 1;
-        }
+
+            if (left) {
+                if (marioDst.left >= marioDiff) {
+                    marioDst.offset(-(Width) / 45, 0);
+                }
+                move++;
+                if (move == 8) {
+                    move = 5;
+                }
+            }
+            if (jump) {
+                jumpCounter++;
+                if (jumpCounter < 10) {
+                    marioDst.offset(0, -(int) (1.5 * marioDiff));
+                }
+            }
+
     }
+
     public void gravity(){
-        boolean drop = true;
+        drop = true;
         for(int i =0;i<stage1.size();i++) {
             if(stage1.get(i).type!= Objects.Type.background && marioDst.intersects(marioDst,stage1.get(i).Dst)){
                 if(marioDst.centerY()<stage1.get(i).Dst.top){

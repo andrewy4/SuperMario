@@ -8,7 +8,7 @@ import android.view.SurfaceHolder;
  */
 public class MarioThread extends Thread{
     private final MarioSurfaceView view;
-    private static final int FRAME_PERIOD = 100; // In ms
+    private static final int FRAME_PERIOD = 50; // In ms
     public MarioThread ( MarioSurfaceView view ) {
         this . view = view ;
     }

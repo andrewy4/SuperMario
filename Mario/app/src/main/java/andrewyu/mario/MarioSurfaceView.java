@@ -18,7 +18,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public Stage1 stage1;
     private float Width;
     private float Height;
-    private boolean walk;
+    private boolean walkRight, walkLeft,jump;
     private ControlBottom controlBottom;
     public MarioSurfaceView (Context context){
         super(context);
@@ -28,7 +28,9 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated (SurfaceHolder holder){
-        walk = false;
+        walkLeft = false;
+        walkRight = false;
+        jump = false;
         Width = getWidth();
         Height = getHeight();
         ArrayList<Bitmap> mario = new ArrayList<>();
@@ -42,6 +44,8 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleft1, options));
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleft2, options));
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleft3, options));
+        mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariorightjump, options));
+        mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.marioleftjump, options));
 
         Bitmap ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground, options);
         Bitmap cloud1 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud1, options);
@@ -76,11 +80,34 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public boolean onTouchEvent (MotionEvent e){
         switch(e. getAction()){
             case MotionEvent.ACTION_DOWN :
-                walk = true;
+                if(controlBottom.leftArrowDst.contains((int)e.getX(),(int)e.getY())){
+                    stage1.move = 4;
+                    walkLeft = true;
+                }
+                if(controlBottom.rightArrowDst.contains((int)e.getX(),(int)e.getY())){
+                    stage1.move = 0;
+                    walkRight = true;
+                }
+                if(controlBottom.jumpDst.contains((int)e.getX(),(int)e.getY())){
+                    if(!stage1.drop) {
+                        if (stage1.move == 4)
+                            stage1.move = 9;
+                        if (stage1.move == 0)
+                            stage1.move = 8;
+                        jump = true;
+                    }
+                }
                 break;
+
             case MotionEvent.ACTION_UP:
-                walk = false;
-                stage1.move =0;
+                if(walkLeft || stage1.move ==9)
+                    stage1.move = 4;
+                if(walkRight || stage1.move == 8)
+                    stage1.move = 0;
+                walkLeft = false;
+                walkRight = false;
+                jump = false;
+                stage1.jumpCounter = 0;
                 break;
         }
         return true;
@@ -95,9 +122,10 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public void renderGame(Canvas c){
         stage1.renderGame(c);
         controlBottom.render(c);
-        if(walk == true){
-            stage1.walking();
+        if(walkRight == true || walkLeft == true || jump == true){
+            stage1.action(walkLeft, walkRight, jump);
         }
+
 
     }
 
