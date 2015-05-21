@@ -32,6 +32,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private boolean paused;
     public Bitmap sky;
     public Bitmap goomba;
+    public Bitmap shell;
     public Bitmap ground;
     public Bitmap cloud1;
     public Bitmap cloud2;
@@ -43,8 +44,12 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     public Bitmap pause;
     public Bitmap back;
     public Bitmap restart;
+    public Bitmap flower;
+    public Bitmap tube;
 
     public ArrayList<Bitmap> mario = new ArrayList<>();
+    public ArrayList<Bitmap>marioWhite = new ArrayList<>();
+    public ArrayList<Bitmap>marioGreen = new ArrayList<>();
     public MarioSurfaceView (Context context){
         super(context);
         getHolder().addCallback(this);
@@ -81,12 +86,34 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleft3, options));
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariorightjump, options));
         mario.add(BitmapFactory.decodeResource(getResources(), R.drawable.marioleftjump, options));
-
-        goomba = BitmapFactory.decodeResource(getResources(), R.drawable.goomba1, options);
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariostandwhite, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkwhite1, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkwhite2, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkwhite3, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariostandleftwhite, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftwhite1, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftwhite2, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftwhite3, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariorightwhitejump, options));
+        marioWhite.add(BitmapFactory.decodeResource(getResources(), R.drawable.marioleftjumpwhite, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariostandgreen, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkgreen1, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkgreen2, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkgreen3, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariostandleftgreen, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftgreen1, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftgreen2, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariowalkleftgreen3, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.mariorightgreenjump, options));
+        marioGreen.add(BitmapFactory.decodeResource(getResources(), R.drawable.marioleftjumpgreen, options));
+        shell =  BitmapFactory.decodeResource(getResources(), R.drawable.shell, options);
+        goomba = BitmapFactory.decodeResource(getResources(), R.drawable.goomba, options);
         ground = BitmapFactory.decodeResource(getResources(), R.drawable.ground, options);
         cloud1 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud1, options);
         cloud2 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud2, options);
         cloud3 = BitmapFactory.decodeResource(getResources(), R.drawable.cloud3, options);
+        flower = BitmapFactory.decodeResource(getResources(), R.drawable.flower, options);
+        tube = BitmapFactory.decodeResource(getResources(), R.drawable.tube, options);
         breakableBrick = BitmapFactory.decodeResource(getResources(), R.drawable.breakablebrick, options);
         questionMarkBrick = BitmapFactory.decodeResource(getResources(), R.drawable.questionmarkbrick, options);
         emptyQuestionBrick = BitmapFactory.decodeResource(getResources(), R.drawable.emptyquestionbrick, options);
@@ -98,7 +125,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         Bitmap rightArrow = BitmapFactory.decodeResource(getResources(), R.drawable.rightarrow, options);
         Bitmap jumpBottom = BitmapFactory.decodeResource(getResources(), R.drawable.jumpbottom, options);
         Bitmap setting = BitmapFactory.decodeResource(getResources(), R.drawable.setting, options);
-        stage1 = new Stage1(mario,goomba,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,castle, Width, Height);
+        stage1 = new Stage1(mario,marioWhite,marioGreen,goomba,shell,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,tube,castle,flower, Width, Height);
         controlBottom = new ControlBottom(leftArrow, rightArrow, jumpBottom,setting, Width, Height);
         renderThread = new MarioThread( this);
         renderThread.start();
@@ -124,7 +151,7 @@ public class MarioSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
                     break;
                 case MotionEvent.ACTION_UP:
-                    stage1 = new Stage1(mario,goomba,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,castle, Width, Height);
+                    stage1 = new Stage1(mario,marioWhite,marioGreen,goomba,shell,sky,ground,cloud1,cloud2,cloud3,breakableBrick,questionMarkBrick,emptyQuestionBrick,tube,castle,flower, Width, Height);
             }
         }
         if(condition!=0){

@@ -6,10 +6,10 @@ import android.graphics.Rect;
 import java.util.ArrayList;
 
 /*
- * Created by Ohyehyu on 5/18/2015.
+ * Created by Andrew Yu on 5/18/2015.
  */
 public class Objects {
-    public enum Type{floor, background, brick, monster}
+    public enum Type{floor, background, brick, monster,evolve}
     Type type;
     public boolean breakable;
     public Bitmap bitmap;
@@ -47,14 +47,14 @@ public class Objects {
         if(Dst.centerX()<= Width && Dst.centerY()<=Height){
             if(left)
                 for(int i=0; i<stage.size();i++){
-                    if (stage.get(i).type != Objects.Type.background && stage.get(i).type!= Objects.Type.monster && Dst.intersects(Dst, stage.get(i).Dst) && Dst.centerX() >= stage.get(i).Dst.right && Dst.centerY() >= stage.get(i).Dst.top && Dst.centerY() <= stage.get(i).Dst.bottom){
+                    if (stage.get(i).type != Objects.Type.background && stage.get(i).type != Type.evolve && stage.get(i).type!= Objects.Type.monster && Dst.intersects(Dst, stage.get(i).Dst) && Dst.centerX() >= stage.get(i).Dst.right && Dst.centerY() >= stage.get(i).Dst.top && Dst.centerY() <= stage.get(i).Dst.bottom){
                         left = false;
                         right = true;
                     }
                 }
             if(right)
                 for(int i=0; i<stage.size();i++){
-                    if (stage.get(i).type != Objects.Type.background && stage.get(i).type!= Objects.Type.monster && Dst.intersects(Dst, stage.get(i).Dst) && Dst.centerX() <= stage.get(i).Dst.left && Dst.centerY() >= stage.get(i).Dst.top && Dst.centerY() <= stage.get(i).Dst.bottom){
+                    if (stage.get(i).type != Objects.Type.background &&stage.get(i).type != Type.evolve && stage.get(i).type!= Objects.Type.monster && Dst.intersects(Dst, stage.get(i).Dst) && Dst.centerX() <= stage.get(i).Dst.left && Dst.centerY() >= stage.get(i).Dst.top && Dst.centerY() <= stage.get(i).Dst.bottom){
                         left = true;
                         right = false;
                     }
